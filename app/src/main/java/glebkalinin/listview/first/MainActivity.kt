@@ -3,6 +3,7 @@ package glebkalinin.listview.first
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,9 @@ class MainActivity : AppCompatActivity() {
         private val mContext: Context
 
         private val names = arrayListOf<String>(
+            "Donald Trump", "Steve Jobs", "Gleb Kalinin", "Barak Obama", "Sergey Lipin", "Timur Nuraev",
+            "Donald Trump", "Steve Jobs", "Gleb Kalinin", "Barak Obama", "Sergey Lipin", "Timur Nuraev",
+            "Donald Trump", "Steve Jobs", "Gleb Kalinin", "Barak Obama", "Sergey Lipin", "Timur Nuraev",
             "Donald Trump", "Steve Jobs", "Gleb Kalinin", "Barak Obama", "Sergey Lipin", "Timur Nuraev"
         )
 
@@ -46,13 +50,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         // responsible for rendering out each row
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
             val layoutInflater = LayoutInflater.from(mContext)
-            val row_main = layoutInflater.inflate(R.layout.row_main, parent, false)
+            val row_main = layoutInflater.inflate(R.layout.row_main, viewGroup, false)
 
+            Log.d("MainActivity","Calling findViewById")
             val nameTextView = row_main.findViewById<TextView>(R.id.name_textview)
             nameTextView.text = names.get(position)
 
+            Log.d("MainActivity","Calling findViewById")
             val position_TextView = row_main.findViewById<TextView>(R.id.position_textview)
             position_TextView.text = "Row nubmer: $position"
 
