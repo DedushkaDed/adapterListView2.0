@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
+import kotlinx.android.synthetic.main.row_main.view.*
 import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     private class MyCustomAdapter(context: Context): BaseAdapter() {
 
-        private val mContext: Context
+//        private val mContext: Context
 
         private val names = arrayListOf<String>(
             "Donald Trump", "Steve Jobs", "Gleb Kalinin", "Barak Obama", "Sergey Lipin", "Timur Nuraev",
@@ -33,9 +34,9 @@ class MainActivity : AppCompatActivity() {
             "Donald Trump", "Steve Jobs", "Gleb Kalinin", "Barak Obama", "Sergey Lipin", "Timur Nuraev"
         )
 
-        init {
-            mContext = context
-        }
+//        init {
+//            mContext = context
+//        }
 
         // responsible how many rows in my list
         override fun getCount(): Int {
@@ -51,18 +52,32 @@ class MainActivity : AppCompatActivity() {
 
         // responsible for rendering out each row
         override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
-            val layoutInflater = LayoutInflater.from(mContext)
-            val row_main = layoutInflater.inflate(R.layout.row_main, viewGroup, false)
 
-            Log.d("MainActivity","Calling findViewById")
-            val nameTextView = row_main.findViewById<TextView>(R.id.name_textview)
-            nameTextView.text = names.get(position)
+            val rowMain: View
 
-            Log.d("MainActivity","Calling findViewById")
-            val position_TextView = row_main.findViewById<TextView>(R.id.position_textview)
-            position_TextView.text = "Row nubmer: $position"
+            if (convertView == null){
+                val layoutInflater = LayoutInflater.from(viewGroup!!.context)
+                rowMain = layoutInflater.inflate(R.layout.row_main, viewGroup, false)
 
-            return row_main
+                Log.d("getFindViewById","Calling expensive method findViewById")
+                val position_TextView = rowMain.findViewById<TextView>(R.id.position_textview)
+                val nameTextView = rowMain.findViewById<TextView>(R.id.name_textview)
+                val viewHolder = ViewHolder(nameTextView,position_TextView)
+                rowMain.tag = viewHolder
+
+            } else {
+                // У нас уже есть convertView, по этому просто дадим rowMain = быть нашим convertView.
+                // Итог: Нам не нужно тратить доп.время на inflate - если мы уже имеем эти данные в convertView.
+                rowMain = convertView
+            }
+
+            val viewHolder = rowMain.tag as ViewHolder
+
+            viewHolder.nameTextView.text = names.get(position)
+            viewHolder.positionTextView.text = "Row nubmer: $position"
+            return rowMain
         }
     }
+
+    private class ViewHolder (val nameTextView: TextView, val positionTextView: TextView)
 }
